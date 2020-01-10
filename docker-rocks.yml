@@ -52,8 +52,6 @@ services:
     image: swarmpit/swarmpit:latest
     environment:
       - SWARMPIT_DB=http://swarmpitdb:5984
-    links:
-      - swarmpitdb
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
@@ -88,6 +86,9 @@ services:
       - agents
     deploy:
       mode: global
+
+volumes:
+  swarmpit_data: {}
 
 networks:
   proxy:
