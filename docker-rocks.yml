@@ -8,6 +8,8 @@ services:
 
   proxy:
     image: traefik
+    env_file:
+      - .env
     command:
       - "--api"
       - "--api.dashboard=true"
