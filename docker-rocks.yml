@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3'
 
 services:
 
@@ -22,10 +22,7 @@ services:
     networks:
       - proxy
     ports:
-      - target: 80
-        published: 80
-        protocol: tcp
-        mode: host
+      - 80:80
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     deploy:

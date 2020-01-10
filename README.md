@@ -1,0 +1,1 @@
+docker stack deploy -c docker-rocks.yml docker-rocks
