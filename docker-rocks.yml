@@ -22,9 +22,14 @@ services:
     networks:
       - proxy
     deploy:
-      placement:
+       placement:
         constraints:
           - node.role == manager
+
+  ################################################################################
+  ##### HELLO WORLD
+  ################################################################################
+
   helloworld:
     image: tutum/hello-world:latest
     networks:
@@ -36,6 +41,58 @@ services:
         - "traefik.http.routers.helloworld.entrypoints=web"
         - "traefik.http.services.helloworld.loadbalancer.server.port=80"
 
-networks:
+
+  ################################################################################
+  ################################################################################
+  ##### SWARMPIT
+  ################################################################################
+  ################################################################################
+
+  swarmpit:
+    image: swarmpit/swarmpit:latest
+    environment:
+      - SWARMPIT_DB=http://swarmpitdb:5984
+    links:
+      - swarmpitdb
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - agents
+      - proxy
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.helloworld.rule=PathPrefix(`/swarmpit`)"
+        - "traefik.http.routers.helloworld.entrypoints=web"
+        - "traefik.http.services.helloworld.loadbalancer.server.port=8080"
+      placement:
+        constraints: [node.role == manager]
+
+  swarmpitdb:
+    image: couchdb:2.3.0
+    volumes:
+      - swarmpit_data:/opt/couchdb/data
+    networks:
+      - agents
+      - proxy
+    deploy:
+      mode: global
+
+  spagent:
+    image: swarmpit/agent:latest
+    environment:
+      - DOCKER_API_VERSION=1.35
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - agents
+    deploy:
+      mode: global
+
+  agents:
+    external:
+      name: agents
   proxy:
-    external: true
+    external:
+      name: proxy
+
