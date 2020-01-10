@@ -8,6 +8,7 @@ services:
 
   proxy:
     image: traefik
+    privileged: true
     command:
       - "--api"
       - "--api.dashboard=true"
