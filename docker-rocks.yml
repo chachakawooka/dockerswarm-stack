@@ -12,7 +12,6 @@ services:
       - "--api"
       - "--api.dashboard=true"
       - "--api.insecure=true"
-      - "--defaultentrypoints=http"
       - "--logLevel=DEBUG"
       - "--docker"
       - "--docker.swarmMode"
