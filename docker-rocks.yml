@@ -12,7 +12,6 @@ services:
       - "--api"
       - "--api.dashboard=true"
       - "--api.insecure=true"
-      - "--logLevel=DEBUG"
       - "--providers.docker"
     networks:
       - proxy
