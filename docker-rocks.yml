@@ -43,57 +43,23 @@ services:
         - "traefik.http.middlewares.helloworld-stripprefix.stripprefix.prefixes=/helloworld"
         - "traefik.http.routers.helloworld.middlewares=helloworld-stripprefix@docker"
 
-
-
   ################################################################################
-  ################################################################################
-  ##### SWARMPIT
-  ################################################################################
+  ##### Portainer
   ################################################################################
 
-  swarmpit:
-    image: swarmpit/swarmpit:latest
-    environment:
-      - SWARMPIT_DB=http://swarmpitdb:5984
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+  portainer:
+    image: portainer/portainer:latest
     networks:
-      - agents
-      - proxy
+     - proxy
     deploy:
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.swarmpit.rule=PathPrefix(`/swarmpit`)"
-        - "traefik.http.routers.swarmpit.entrypoints=web"
-        - "traefik.http.services.swarmpit.loadbalancer.server.port=8080"
-        - "traefik.http.middlewares.swarmpit-stripprefix.stripprefix.prefixes=/swarmpit"
-        - "traefik.http.routers.swarmpit.middlewares=swarmpit-stripprefix@docker"
-      placement:
-        constraints: [node.role == manager]
+        - "traefik.http.routers.portainer.rule=PathPrefix(`/portainer`)"
+        - "traefik.http.routers.portainer.entrypoints=web"
+        - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+        - "traefik.http.middlewares.portainer-stripprefix.stripprefix.prefixes=/portainer"
+        - "traefik.http.routers.portainer.middlewares=portainer-stripprefix@docker"
 
-  swarmpitdb:
-    image: couchdb:2.3.0
-    volumes:
-      - swarmpit_data:/opt/couchdb/data
-    networks:
-      - agents
-      - proxy
-    deploy:
-      mode: global
-
-  spagent:
-    image: swarmpit/agent:latest
-    environment:
-      - DOCKER_API_VERSION=1.35
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    networks:
-      - agents
-    deploy:
-      mode: global
-
-volumes:
-  swarmpit_data: {}
 
 networks:
   proxy:
