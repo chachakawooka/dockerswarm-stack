@@ -13,10 +13,7 @@ services:
       - "--api.dashboard=true"
       - "--api.insecure=true"
       - "--logLevel=DEBUG"
-      - "--docker"
-      - "--docker.swarmMode"
-      - "--docker.network=proxy"
-      - "--docker.endpoint=unix:///var/run/docker.sock"
+      - "--providers.docker"
     networks:
       - proxy
     ports:
