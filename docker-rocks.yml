@@ -22,10 +22,9 @@ services:
     deploy:
       mode: global
       labels:
-        - "traefik.http.services.traefik.loadbalancer.server.port=8080"
-        - "traefik.http.routers.traefik.rule=PathPrefix(`/api`) || PathPrefix(`/dashboard`)"
-        - "traefik.http.routers.traefik.service=traefik@internal"
-        - "traefik.http.routers.traefik.middlewares=auth"
+        - "traefik.http.routers.api.rule=PathPrefix(`/api`) || PathPrefix(`/dashboard`)"
+        - "traefik.http.routers.api.service=api@internal"
+        - "traefik.http.routers.api.middlewares=auth"
         - "traefik.http.middlewares.auth.basicauth.users=${TRAEFIIK_ADMIN}:${TRAEFIIK_PASSWORD}"
       placement:
         constraints:
