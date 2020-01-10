@@ -1,4 +1,4 @@
-version: '3.2'
+version: '3'
 
 services:
 
@@ -86,5 +86,5 @@ networks:
   proxy:
     external: true
   portainer_agents:
-    attachable: true
+    external: true
 
