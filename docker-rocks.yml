@@ -60,9 +60,9 @@ services:
     deploy:
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.helloworld.rule=PathPrefix(`/swarmpit`)"
-        - "traefik.http.routers.helloworld.entrypoints=web"
-        - "traefik.http.services.helloworld.loadbalancer.server.port=8080"
+        - "traefik.http.routers.swarmpit.rule=PathPrefix(`/swarmpit`)"
+        - "traefik.http.routers.swarmpit.entrypoints=web"
+        - "traefik.http.services.swarmpit.loadbalancer.server.port=8080"
       placement:
         constraints: [node.role == manager]
 
