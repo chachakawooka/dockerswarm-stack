@@ -1,0 +1,50 @@
+version: '3.3'
+
+services:
+
+  ################################################################################
+  ##### TRAEFIK
+  ################################################################################
+
+  proxy:
+    image: traefik
+    command:
+      - "--api"
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      - "--defaultentrypoints=http"
+      - "--logLevel=DEBUG"
+      - "--docker"
+      - "--docker.swarmMode"
+      - "--docker.network=proxy"
+      - "--docker.endpoint=unix:///var/run/docker.sock"
+      - "--docker.watch"
+    networks:
+      - proxy
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      mode: global
+      labels:
+        - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+        - "traefik.http.routers.traefik.rule=PathPrefix(`/api`) || PathPrefix(`/dashboard`)"
+        - "traefik.http.routers.traefik.service=traefik@internal"
+        - "traefik.http.routers.traefik.middlewares=auth"
+        - "traefik.http.middlewares.auth.basicauth.users=${TRAEFIIK_ADMIN}:${TRAEFIIK_PASSWORD}"
+      placement:
+        constraints:
+          - node.role == manager
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+networks:
+  traefik-public:
+    external: true
