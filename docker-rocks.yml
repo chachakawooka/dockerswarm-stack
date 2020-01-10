@@ -89,10 +89,9 @@ services:
     deploy:
       mode: global
 
-  agents:
-    external:
-      name: agents
+networks:
   proxy:
-    external:
-      name: proxy
+    external: true
+  agents:
+    external: true
 
