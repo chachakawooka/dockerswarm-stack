@@ -40,6 +40,9 @@ services:
         - "traefik.http.routers.helloworld.rule=PathPrefix(`/helloworld`)"
         - "traefik.http.routers.helloworld.entrypoints=web"
         - "traefik.http.services.helloworld.loadbalancer.server.port=80"
+        - "traefik.http.middlewares.helloworld-stripprefix.stripprefix.prefixes=/helloworld"
+        - "traefik.http.routers.helloworld.middlewares=helloworld-stripprefix@docker"
+
 
 
   ################################################################################
@@ -63,6 +66,8 @@ services:
         - "traefik.http.routers.swarmpit.rule=PathPrefix(`/swarmpit`)"
         - "traefik.http.routers.swarmpit.entrypoints=web"
         - "traefik.http.services.swarmpit.loadbalancer.server.port=8080"
+        - "traefik.http.middlewares.swarmpit-stripprefix.stripprefix.prefixes=/swarmpit"
+        - "traefik.http.routers.swarmpit.middlewares=swarmpit-stripprefix@docker"
       placement:
         constraints: [node.role == manager]
 
